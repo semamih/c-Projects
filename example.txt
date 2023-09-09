@@ -1,0 +1,48 @@
+#include <iostream>
+#include <cmath>
+#include <math.h>
+
+using namespace std;
+
+void main()
+{
+	setlocale(LC_ALL, "RU");
+
+	float room_height, room_width, room_lenght, paper_width, paper_height;
+	float area_paper, room_perimeter;
+	float count, count_paper, check, ost_paper,ost;
+
+	cout << "Введите высоту комнаты: ";
+	cin >> room_height;
+
+	cout << "Введите длину комнаты: ";
+	cin >> room_lenght;
+
+	cout << "Введите ширину комнаты: ";
+	cin >> room_width;
+
+	cout << "Введите высоту обоев: ";
+	cin >> paper_height;
+
+	cout << "Введите ширину обоев: ";
+	cin >> paper_width;
+
+	area_paper = paper_height * paper_width; //Ищем площадь обоев
+
+	room_perimeter = room_width * 2 + room_lenght * 2; // Ищем периметр комнаты 
+
+	check = (int)(paper_height / room_height) * paper_width; // Проверяем сколько раз можно использовать одну обоину 
+
+	count = (room_perimeter / check); // Проверяем какую часть от обоев мы используем теоретически 
+
+	count_paper = ceil(room_perimeter / check); // Ищем кол-во использованных обоев
+
+	ost = fmod(paper_height, room_height); // Ищем остаток обоев, который закидываем в %
+
+	ost_paper = ((((check * room_height) * (count_paper - count)) + (ost * count_paper)) * 100) / (count_paper * area_paper);
+
+	cout << "Необходимое кол-во рулонов: " << count_paper << endl << "Процент неиспользованных обоев: " << ost_paper << endl;
+
+	system("pause");
+
+}
