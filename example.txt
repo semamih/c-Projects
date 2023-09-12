@@ -15,17 +15,83 @@ void main()
 	cout << "Введите высоту комнаты: ";
 	cin >> room_height;
 
+	while (cin.fail() == 1) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Введите число!" << endl;
+		cin >> room_height;
+	}
+	while (room_height <= 0) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Число должно быть больше нуля!" << endl;
+		cin >> room_height;
+	}
+
 	cout << "Введите длину комнаты: ";
 	cin >> room_lenght;
+
+	while (cin.fail() == 1) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Введите число!" << endl;
+		cin >> room_lenght;
+	}
+	while (room_lenght <= 0) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Число должно быть больше нуля!" << endl;
+		cin >> room_lenght;
+	}
 
 	cout << "Введите ширину комнаты: ";
 	cin >> room_width;
 
+	while (cin.fail() == 1) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Введите число!" << endl;
+		cin >> room_width;
+	}
+	while (room_width <= 0) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Число должно быть больше нуля!" << endl;
+		cin >> room_width;
+	}
+
 	cout << "Введите высоту обоев: ";
 	cin >> paper_height;
 
+	while (cin.fail() == 1) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Введите число!" << endl;
+		cin >> paper_height;
+	}
+	while (paper_height <= 0) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Число должно быть больше нуля!" << endl;
+		cin >> paper_height;
+	}
+
 	cout << "Введите ширину обоев: ";
 	cin >> paper_width;
+
+	while (cin.fail() == 1) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Введите число!" << endl;
+		cin >> paper_width;
+	}
+	while (paper_width <= 0) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Число должно быть больше нуля!" << endl;
+		cin >> paper_width;
+	}
+
 
 	area_paper = paper_height * paper_width; //Ищем площадь обоев
 
@@ -44,5 +110,6 @@ void main()
 	cout << "Необходимое кол-во рулонов: " << count_paper << endl << "Процент неиспользованных обоев: " << ost_paper << endl;
 
 	system("pause");
+
 
 }
