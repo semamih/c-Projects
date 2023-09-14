@@ -105,7 +105,7 @@ void main()
 
 	ost = fmod(paper_height, room_height); // Ищем остаток обоев, который закидываем в %
 
-	ost_paper = ((((check * room_height) * (count_paper - count)) + (ost * count_paper)) * 100) / (count_paper * area_paper);
+	ost_paper = ((((check * room_height) * (count_paper - count)) + (ost * check * count_paper)) * 100) / (count_paper * area_paper);
 
 	cout << "Необходимое кол-во рулонов: " << count_paper << endl << "Процент неиспользованных обоев: " << ost_paper << endl;
 
