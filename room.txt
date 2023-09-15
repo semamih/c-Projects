@@ -5,12 +5,13 @@
 using namespace std;
 
 void main()
+
 {
 	setlocale(LC_ALL, "RU");
 
 	float room_height, room_width, room_lenght, paper_width, paper_height;
 	float area_paper, room_perimeter;
-	float count, count_paper, check, ost_paper,ost;
+	float count, count_paper, check, ost_paper, ost;
 
 	cout << "Введите высоту комнаты: ";
 	cin >> room_height;
@@ -75,6 +76,12 @@ void main()
 		cout << "Ошибка. Число должно быть больше нуля!" << endl;
 		cin >> paper_height;
 	}
+	while (paper_height < room_height) {
+		cin.clear();
+		cin.ignore();
+		cout << "Ошибка. Потберите обои, которые будут больше или равны высоте комнаты!" << endl;
+		cin >> paper_height;
+	}
 
 	cout << "Введите ширину обоев: ";
 	cin >> paper_width;
@@ -105,7 +112,7 @@ void main()
 
 	ost = fmod(paper_height, room_height); // Ищем остаток обоев, который закидываем в %
 
-	ost_paper = ((((check * room_height) * (count_paper - count)) + (ost * check * count_paper)) * 100) / (count_paper * area_paper);
+	ost_paper = ((((check * room_height) * (count_paper - count)) + (ost * count_paper)) * 100) / (count_paper * area_paper);
 
 	cout << "Необходимое кол-во рулонов: " << count_paper << endl << "Процент неиспользованных обоев: " << ost_paper << endl;
 
