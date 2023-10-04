@@ -1,0 +1,56 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+
+using namespace std;
+
+void answer(const string& input) {
+    setlocale(LC_ALL, "RU");
+    istringstream stream(input);
+    string word;
+    vector <string> shortestWords, longestWords;
+    int shortestLength = INT_MAX, longestLength = INT_MIN;
+
+    while (stream >> word) {
+        int length = word.length();
+
+        if (length < shortestLength) {
+            shortestWords.clear();
+            shortestWords.push_back(word);
+            shortestLength = length;
+        }
+        else if (length == shortestLength) {
+            shortestWords.push_back(word);
+        }
+
+        if (length > longestLength) {
+            longestWords.clear();
+            longestWords.push_back(word);
+            longestLength = length;
+        }
+        else if (length == longestLength) {
+            longestWords.push_back(word);
+        }
+    }
+
+    cout << "Самое короткое слово:" << endl;
+    for (const auto& shortestWord : shortestWords) {
+        cout << shortestWord << " (Длина " << shortestLength << ")" << endl;
+    }
+
+    cout << "Самое длинное слово:" << endl;
+    for (const auto& longestWord : longestWords) {
+        cout << longestWord << " (Длина " << longestLength << ")" << endl;
+    }
+}
+
+int main() {
+    setlocale(LC_ALL, "RU");
+    string phrase;
+    cout << "Впишите фразу: " << endl;
+    getline(cin, phrase);
+    answer(phrase);
+
+    return 0;
+}
