@@ -1,0 +1,42 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    setlocale(LC_ALL, "Ru");
+    string phrase;
+    cout << "Введите фразу: ";
+    getline(cin, phrase);
+    int Index_1 = 0;
+    int Index_2 = 0;
+    cout << "Введите номер первой цифры: ";
+    cin >> Index_1;
+    cout << "Введите номер последней цифры: ";
+    cin >> Index_2;
+    while (Index_2 < Index_1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Неверно задан диапазон" << endl;
+        cin >> Index_2;
+    }
+    int count = 0;
+    int cou = Index_1;
+    for (char c : phrase) {
+        if (isdigit(c)) {
+            count++;
+            while (count >= Index_1 && Index_2 >= count ) {
+                cout << "Цифрой номер " << cou << " является " << c << endl;
+                cou++;
+                break;
+            }
+        }
+    }
+
+
+
+
+    return 0;
+}
