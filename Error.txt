@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int Error(int number) {
+int checkError(int number) {
     cin >> number;
     while (cin.fail() == 1) {
         cin.clear();
@@ -26,7 +26,7 @@ int main() {
     int n = 0;
 
     cout << "Введите число n: ";
-    n = Error(n);
+    n = checkError(n);
 
     cout << "Число n: " << n;
 
