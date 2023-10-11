@@ -1,1 +1,37 @@
+#include <iostream>
+#include <fstream>
 
+using namespace std;
+
+int Error(int number) {
+    cin >> number;
+    while (cin.fail() == 1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+        cout << "Ошибка. Введите число!" << endl;
+        cin >> number;
+    }
+    while (number <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Число должно быть больше нуля!" << endl;
+        cin >> number;
+    }
+    return number;
+}
+
+int main() {
+    setlocale(LC_ALL, "RU");
+
+    int n = 0;
+
+    cout << "Введите число n: ";
+    n = Error(n);
+
+    cout << "Число n: " << n;
+
+
+
+    return 0;
+    system("pause");
+}
