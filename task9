@@ -1,0 +1,161 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+int checkError(int number) {
+    cin >> number;
+    while (cin.fail() == 1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите число!" << endl;
+        cin >> number;
+    }
+    while (number <= 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Число должно быть больше нуля!" << endl;
+        cin >> number;
+    }
+    return number;
+}
+
+int main() {
+    setlocale(LC_ALL, "Ru");
+    int stop = 1;
+
+    do {
+        int N = 0;
+        cout << "Введите количество треугольников: ";
+        N = checkError(N);
+
+        int value;
+        cout << "Как отобразить треугольник? " << endl << "Введите соответствующее число: " << endl << "1 - горизонатально" << endl << "2 - горизонтально вверх ногами" << endl << "3 - вертикально" << endl << "4 - вертикально вверх ногами" << endl;
+        cin >> value;
+
+        switch (value)
+        {
+        case 1:
+            for (int row = 1; row <= N; ++row) {
+                for (int triangle = 1; triangle <= N; ++triangle) {
+                    // Вычисляем отступы слева и справа
+                    int leftPadding = N - row;
+                    int rightPadding = N - row;
+
+                    // Выводим отступы слева
+                    for (int spaces = 0; spaces < leftPadding; ++spaces) {
+                        cout << " ";
+                    }
+
+                    // Выводим звездочки
+                    for (int stars = 1; stars <= 2 * row - 1; ++stars) {
+                        cout << "*";
+                    }
+
+                    // Выводим отступы справа
+                    for (int spaces = 0; spaces < rightPadding; ++spaces) {
+                        cout << " ";
+                    }
+
+                    // Разделяем треугольники пробелом
+                    if (triangle < N) {
+                        cout << "   "; // Три пробела для разделения
+                    }
+                }
+                cout << endl;
+            }
+            break;
+        case 2:
+            for (int row = N; row >= 1; --row) {
+                for (int triangle = 1; triangle <= N; ++triangle) {
+                    // Вычисляем отступы слева и справа
+                    int leftPadding = N - row;
+                    int rightPadding = N - row;
+
+                    // Выводим отступы слева
+                    for (int spaces = 0; spaces < leftPadding; ++spaces) {
+                        cout << " ";
+                    }
+
+                    // Выводим звездочки
+                    for (int stars = 1; stars <= 2 * row - 1; ++stars) {
+                        cout << "*";
+                    }
+
+                    // Выводим отступы справа
+                    for (int spaces = 0; spaces < rightPadding; ++spaces) {
+                        cout << " ";
+                    }
+
+                    // Разделяем треугольники пробелом
+                    if (triangle < N) {
+                        cout << "   "; // Три пробела для разделения
+                    }
+                }
+                cout << endl;
+            }
+            break;
+        case 3:
+            for (int triangle = 1; triangle <= N; ++triangle) {
+                // Выводим треугольник
+                for (int row = 1; row <= N; ++row) {
+                    // Выводим пробелы слева для выравнивания
+                    for (int spaces = N - row; spaces > 0; --spaces) {
+                        cout << " ";
+                    }
+                    // Выводим звездочки
+                    for (int stars = 1; stars <= 2 * row - 1; ++stars) {
+                        cout << "*";
+                    }
+                    cout << endl;
+                }
+
+                // Переходим на следующий треугольник
+                if (triangle < N) {
+                    cout << endl; // Пустая строка между треугольниками
+                }
+            }
+            break;
+        case 4:
+            for (int triangle = 1; triangle <= N; ++triangle) {
+                // Выводим треугольник вверх ногами
+                for (int row = N; row >= 1; --row) {
+                    // Выводим пробелы слева для выравнивания
+                    for (int spaces = N - row; spaces > 0; --spaces) {
+                        cout << " ";
+                    }
+                    // Выводим звездочки
+                    for (int stars = 1; stars <= 2 * row - 1; ++stars) {
+                        cout << "*";
+                    }
+                    cout << endl;
+                }
+
+                // Переходим на следующий треугольник
+                if (triangle < N) {
+                    cout << endl; // Пустая строка между треугольниками
+                }
+            }
+            break;
+        default:
+            cout << "Введите число от 1 до 4!";
+            break;
+        }
+        cout << endl << "Введите 1, чтобы продолжить\nВведите 0, чтобы остановить программу\n";
+        cin >> stop;
+        while (cin.fail() == 1) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Ошибка. Введите число!" << endl;
+            cin >> stop;
+        }
+        while (stop < 0 || stop > 1) {
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Ошибка. Введите 1 или 0!" << endl;
+            cin >> stop;
+        }
+    } while (stop != 0);
+
+}
