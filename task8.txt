@@ -1,15 +1,108 @@
 #include <iostream>
 #include <fstream>
-#include <string>
+#include <vector>
 
 using namespace std;
+
+int checkError(int number) {
+    cin >> number;
+    while (cin.fail() == 1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите число!" << endl;
+        cin >> number;
+    }
+    while (number < 0 || number > 1 ) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите 1 или 0!" << endl;
+        cin >> number;
+    }
+    return number;
+} 
+int checkError2(int number) {
+    cin >> number;
+    while (cin.fail() == 1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите число!" << endl;
+        cin >> number;
+    }
+    while (number < 1 || number > 8) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите число от 1 до 8!!" << endl;
+        cin >> number;
+    }
+    return number;
+}
+void write(vector<int> inputNumbers){
+    std::ofstream file("eight_bits.bin", std::ios::binary);
+
+        if (!file.is_open()) {
+            std::cerr << "Не удалось открыть файл для записи." << std::endl;
+        }
+
+        // Записываем введенные числа в файл как биты
+        unsigned char data = 0;
+        for (int i = 0; i < 8; i++) {
+            data |= (inputNumbers[i] << (7 - i));
+        }
+
+        file.write(reinterpret_cast<char*>(&data), sizeof(data));
+
+        // Закрываем файл
+        file.close();
+}
+void read(vector<int> answers){
+    ifstream file("eight_bits.bin", ios::binary);
+
+    if (!file.is_open()) {
+        cerr << "Не удалось открыть файл для чтения." << endl;
+    }
+
+    // Читаем 1 байт из файла
+    unsigned char data;
+    file.read(reinterpret_cast<char*>(&data), sizeof(data));
+
+    // Закрываем файл
+    file.close();
+
+    // Выводим содержимое байта (восьми бит) в двоичной форме
+    for (int i = 7; i >= 0; i--) {
+        int bit = (data >> i) & 1;
+        answers.push_back(bit);
+    }
+}
+void check() {
+    ifstream file("eight_bits.bin", ios::binary);
+
+    if (!file.is_open()) {
+        cerr << "Не удалось открыть файл для чтения." << endl;
+    }
+
+    // Читаем 1 байт из файла
+    unsigned char data;
+    file.read(reinterpret_cast<char*>(&data), sizeof(data));
+
+    // Закрываем файл
+    file.close();
+
+    // Выводим содержимое байта (восьми бит) в двоичной форме
+    cout << "Содержимое файла (в бинарной форме): ";
+    for (int i = 7; i >= 0; i--) {
+        cout << ((data >> i) & 1);
+    }
+    cout << endl;
+}
 
 int main() {
     setlocale(LC_ALL, "Ru");
     int stop = 1;
 
     do {
-        bool answers[8] = { false };  // Исходные ответы
+        vector<int> inputNumbers;
+        vector<int> answers;
         string questions[8] = {
             "Вы готовы к началу опроса?",
             "Вам нравится шоколад?",
@@ -25,147 +118,66 @@ int main() {
         cout << "Добро пожаловать! Пройдите опрос " << endl << endl;
 
         for (int i = 0; i < 8; i++) {
-            int response;
+            int response = 0;
             cout << "Вопрос " << (i + 1) <<": " << questions[i] << endl << "Да - 1 \nНет - 0" << endl << "Ваш ответ: ";
-            cin >> response;
-            while (cin.fail() == 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число!" << endl;
-                cin >> response;
-            }
-            while (response < 0 || response > 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите 1 или 0!" << endl;
-                cin >> response;
-            }
+            response = checkError(response);
             if (response == 1) {
-                answers[i] = true;
+                inputNumbers.push_back(1);
             }
             else if(response == 0) {
-                answers[i] = false;
+                inputNumbers.push_back(0);
             }
             cout << endl;
-
         }
 
+        write(inputNumbers);
+        read(answers);
+        cout << "Ответы успешно сохранены!" << endl;
         // Позволяем пользователю изменить ответы
         cout << "Желаете изменить ответы? (Да - 1/Нет - 0) ";
-        int change;
-        cin >> change;
-        while (cin.fail() == 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Ошибка. Введите число!" << endl;
-            cin >> change;
-        }
-        while (change < 0 || change > 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Ошибка. Введите 1 или 0!" << endl;
-            cin >> change;
-        }
+        int change = 0;
+        change = checkError(change);
         if (change == 1) {
+            int count = 0;
             cout << endl << "Вот список вопросов с вашими ответами" << endl;
-            for (int i = 0; i < 8; i++) {
-                cout << "Вопрос " << (i + 1) << ": " << questions[i] << endl << "Ваш ответ: " << answers[i] << endl;
+            for (size_t i = 0; i < inputNumbers.size(); ++i) {
+                cout << "Вопрос " << (i + 1) << ": " << questions[i] << endl << "Ваш ответ: " << inputNumbers[i] << endl;
             }
-            int count;
-            cout << "Введите кол-во вопросов,которые хотите изменить: ";
-            cin >> count;
-            while (cin.fail() == 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число!" << endl;
-                cin >> count;
-            }
-            while (count < 1 || count > 8) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число от 1 до 8!" << endl;
-                cin >> count;
-            }
-            int num;
-            int ans;
+            cout << endl<<"Введите кол-во вопросов,которые хотите изменить: ";
+            count = checkError2(count);
+            int num = 0;
+            int ans = 0;
             for (int i = 1; i < count + 1; i++) {
-            cout << "Введите номер вопроса, который хотите изменить: ";
-            cin >> num;
-            while (cin.fail() == 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число!" << endl;
-                cin >> num;
+                cout << "Введите номер вопроса, который хотите изменить: ";
+                num = checkError2(num);
+                cout << "Вопрос " << (num ) << ": " << questions[num - 1] << endl << "Да - 1 \nНет - 0" << endl;
+                cout << "Введите свой ответ: ";
+                ans = checkError(ans);
+                if (ans == 1) {
+                    inputNumbers[num - 1] = 1;
+                }
+                else if (ans == 0) {
+                    inputNumbers[num - 1] = 0;
+                }
+                write(inputNumbers);
+                cout << "Ответ успешно обновлён!" << endl << endl;
             }
-            while (num < 1 || num > 8) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число от 1 до 8!" << endl;
-                cin >> num;
-            }
-            cout << "Вопрос " << (num ) << ": " << questions[num - 1] << endl << "Да - 1 \nНет - 0" << endl << "Ваш ответ: ";
-            cout << "Введите свой ответ: ";
-            cin >> ans;
-            while (cin.fail() == 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите число!" << endl;
-                cin >> ans;
-            }
-            while (ans < 0 || ans > 1) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Ошибка. Введите 1 или 0!" << endl;
-                cin >> ans;
-            }
-            if (ans == 1) {
-                answers[num - 1] = true;
-            }
-            else if (ans == 0) {
-                answers[num - 1] = false;
-            }
-            }
-        
 
+            cout << "Спасибо за пройденный опрос!";
+            cout << endl << "Вот список вопросов с вашими ответами" << endl;
+            for (size_t i = 0; i < inputNumbers.size(); ++i) {
+                cout << "Вопрос " << (i + 1) << ": " << questions[i] << endl << "Ваш ответ: " << inputNumbers[i] << endl;
+            }
         }
         else {
-            cout << "Спасибо за пройденный опрос!";
+            cout << "Спасибо за пройденный опрос!" << endl;
+            cout << endl << "Вот список вопросов с вашими ответами" << endl;
+            for (size_t i = 0; i < inputNumbers.size(); ++i) {
+                cout << "Вопрос " << (i + 1) << ": " << questions[i] << endl << "Ваш ответ: " << inputNumbers[i] << endl;   
+            }
         }
- 
-        ofstream outputFile("output.txt");
-        if (!outputFile.is_open()) {
-            cout << "Не удалось открыть файл для записи." << endl;
-            return 1;
-        }
-
-        // Записать массив в файл
-        for (int i = 0; i < 8; ++i) {
-            outputFile << answers[i] << '\n';
-        }
-
-        // Закрыть файл
-        outputFile.close();
-        cout << endl << "Вы успешно прошли тестирование!" << endl;
-        cout << endl << "Вот ваши ответы" << endl;
-        for (int i = 0; i < 8; i++) {
-            cout << "Вопрос " << (i + 1) << ": " << questions[i] << endl << "Ваш ответ: " << answers[i] << endl;
-        }
-
-
         cout << endl << "Введите 1, чтобы продолжить\nВведите 0, чтобы остановить программу\n";
-        cin >> stop;
-        while (cin.fail() == 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Ошибка. Введите число!" << endl;
-            cin >> stop;
-        }
-        while (stop < 0 || stop > 1) {
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Ошибка. Введите 1 или 0!" << endl;
-            cin >> stop;
-        }
+        stop = checkError(stop);
     } while (stop != 0);
 
 }
