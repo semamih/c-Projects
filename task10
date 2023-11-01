@@ -1,0 +1,125 @@
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+
+using namespace std;
+
+int checkError(int number) {
+    cin >> number;
+    while (cin.fail() == 1) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Введите число!" << endl;
+        cin >> number;
+    }
+    while (number < 0) {
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        cout << "Ошибка. Число должно быть больше нуля!" << endl;
+        cin >> number;
+    }
+    return number;
+}
+float minEl(float* arr, float size) {
+    float minElement = arr[0];
+    int minIndex = 0;
+    for (int i = 1; i < size; i++) {
+        if (arr[i] < minElement) {
+            minElement = arr[i];
+            minIndex = i;
+        }
+    }
+
+    return minIndex;
+}
+float findSum(float* arr, float size) {
+    float sum = 0;
+    for (int i = 0; i < size; i++) {
+        sum += arr[i];
+    }
+    return sum;
+}
+
+int main() {
+    setlocale(LC_ALL, "RU");
+    int stop = 1;
+
+    do {
+    int size = 0;
+    int person = 0;
+
+    cout << "Введите количество туристов: ";
+    person = checkError(person);
+
+    cout << "Введите количество вещей: ";
+    size = checkError(size);
+    float* preThings = new float[size];
+    float* Things = new float[size];
+    float* Packs = new float[person];
+
+    for (int i = 0; i < person; i++) {
+        Packs[i] = 0;
+    }
+    for (int i = 0; i < size; i++) {
+        Things[i] = 0;
+    }
+    for (int i = 0; i < size; i++) {
+        preThings[i] = 0;
+    }
+
+    for (int i = 0; i < size; i++) {
+        cout << "Введите вес вещи " << i + 1 << ": ";
+        preThings[i] = checkError(preThings[i]);
+    }
+    sort(preThings, preThings + size);
+    for (int i = 0; i < size; i++) {
+        Things[i] = preThings[size - i - 1];
+    }
+    if (person > size) {
+        for (int i = 0; i < size; i++) { 
+            Packs[i] = Things[i];
+            Things[i] = 0;
+
+        }
+    }
+    else {
+        for (int i = 0; i < person; i++) {
+            Packs[i] = Things[i];
+            Things[i] = 0;
+
+        }
+    }
+
+    // Basic
+    int summ = 0;
+    if (person == 1) {
+        summ = findSum(preThings, size);
+        Packs[0] = summ;
+        cout << endl << "Рюкзак туриста: ";
+        cout << Packs[0];
+    }
+    else {
+        int index = 0;
+        for (int j = 0; j < size; j++) {
+            for (int i = 0; i < person - 1; i++) {
+                index = minEl(Packs, person);
+                Packs[index] += Things[j];
+                Things[j] = 0;
+            }
+        }
+        cout << endl << "Рюкзаки туристов: ";
+        for (int i = 0; i < person; i++) {
+            cout << Packs[i] << " ";
+        }
+    }
+    cout << endl << "Введите 1, чтобы продолжить\nВведите 0, чтобы остановить программу\n";
+    stop = checkError(stop);
+
+    } while (stop != 0);
+
+    return 0;
+    system("pause");
+}
+
+
+
